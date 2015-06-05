@@ -3,6 +3,7 @@
 use Illuminate\Database\Eloquent\Model;
 
 use Auth;
+use Illuminate\Support\Facades\DB;
 use URL;
 
 class Channel extends Model {
@@ -126,6 +127,14 @@ class Channel extends Model {
 
 	public function watchers()
 	{
-		return $this->belongsToMany('Fetch404\Core\Models\User', 'watched_channels', 'channel_id', 'user_id')->withTimestamps();
+		return $this->belongsToMany('Fetch404\Core\Models\User', 'watched_channels', 'channel_id')->withTimestamps();
+	}
+
+	public function removeWatcher($user)
+	{
+		return DB::table('watched_channels')
+			->where('channel_id', '=', $this->id)
+			->where('user_id', '=', $user->id)
+			->delete();
 	}
 }

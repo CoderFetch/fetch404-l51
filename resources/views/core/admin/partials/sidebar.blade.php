@@ -16,6 +16,9 @@
 			<li{{{ Request::is('admin/forum*') ? ' class=active' : '' }}}>
 				<a href="/admin/forum"><i class="fa fa-comments"></i> Forum</a>
 			</li>
+			<li{{{ Request::is('admin/badges*') ? ' class=active' : '' }}}>
+				<a href="/admin/badges"><i class="fa fa-certificate"></i> Badges</a>
+			</li>
 		</ul>
 	</div>
 	<div class="well well-sm">

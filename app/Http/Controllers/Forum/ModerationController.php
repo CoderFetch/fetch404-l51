@@ -31,7 +31,7 @@ class ModerationController extends Controller {
 			return redirect()->back();
 		}
 
-		event(new TopicWasLocked($topic, $user));
+		$topic->update(array('locked' => 1));
 
 		Flash::success('Locked thread');
 
@@ -56,7 +56,7 @@ class ModerationController extends Controller {
 			return redirect()->back();
 		}
 
-		event(new TopicWasUnlocked($topic, $user));
+		$topic->update(array('locked' => 0));
 
 		Flash::success('Unlocked thread');
 
@@ -80,7 +80,7 @@ class ModerationController extends Controller {
 			return redirect()->back();
 		}
 
-		event(new TopicWasPinned($topic, $user));
+		$topic->update(array('pinned' => 1));
 
 		Flash::success('Pinned thread');
 

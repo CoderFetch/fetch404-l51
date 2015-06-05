@@ -28,14 +28,13 @@
 
             {!! Form::open(['route' => 'account.post.update.settings', 'class' => 'form-horizontal']) !!}
             <div class="form-group">
-                <label for="name">Username: <i class="fa fa-question-circle fa-fw"></i></label>
+                <label for="name">Username: </label>
                 <input class="form-control" type="text" name="name" value="{{{ Auth::user()->name }}}" />
-                <small class="help-block">* Changing your username will not affect any of your data.</small>
             </div>
 
             @if (Auth::user()->isConfirmed())
                 <div class="form-group">
-                    <label for="name">Email: <i class="fa fa-question-circle fa-fw" data-type='tooltip' data-original-title='<h5>Changing your email requires that you re-confirm your account afterwards.</h5>' data-placement='right'></i></label>
+                    <label for="name">Email: </label>
                     <input class="form-control" type="text" name="email" value="{{{ Auth::user()->email }}}" />
                 </div>
             @else
@@ -45,7 +44,7 @@
             @endif
 
             <div class="form-group">
-                <label for="password">Password: <i class="fa fa-question-circle fa-fw"></i></label>
+                <label for="password">Password: </label>
                 <input class="form-control" name="password" type="password" value="" id="password">
                 <small class="help-block">* Enter your password in this box and re-enter it in the second.</small>
             </div>

@@ -1,7 +1,5 @@
 <?php namespace App\Http\Controllers\Admin;
 
-use App\Events\UserWasBanned;
-use App\Events\UserWasUnbanned;
 use App\Http\Controllers\AdminController;
 
 use App\Http\Requests\Admin\Forum\BanUserRequest;
@@ -9,9 +7,10 @@ use App\Http\Requests\Admin\Forum\UnbanUserRequest;
 
 use Datatables;
 
+use Fetch404\Core\Events\UserWasBanned;
+use Fetch404\Core\Events\UserWasUnbanned;
 use Fetch404\Core\Models\Permission;
 use Fetch404\Core\Models\Role;
-use Fetch404\Core\Models\User;
 
 use Fetch404\Core\Repositories\UsersRepository;
 use Input;

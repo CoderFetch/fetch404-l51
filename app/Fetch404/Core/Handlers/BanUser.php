@@ -1,7 +1,7 @@
 <?php namespace Fetch404\Core\Handlers;
 
-use App\Events\UserWasBanned;
 use Carbon\Carbon;
+use Fetch404\Core\Events\UserWasBanned;
 
 class BanUser {
 

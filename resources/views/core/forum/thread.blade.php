@@ -104,4 +104,11 @@
 			@endif
 		</span>
 	@endif
+	@section('jquery')
+	var channel = pusher.subscribe('thread-{{{ $thread->id }}}');
+
+	channel.bind('UserRepliedToThread', function(data) {
+		console.log("reply");
+	});
+	@endsection
 @endsection

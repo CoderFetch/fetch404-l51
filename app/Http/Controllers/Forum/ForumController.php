@@ -5,10 +5,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Forum\Threads\ThreadCreateRequest;
 use App\Http\Requests\Forum\Threads\ThreadReplyRequest;
 
+use Fetch404\Core\Events\ThreadWasCreated;
+use Fetch404\Core\Events\UserRepliedToThread;
+use Fetch404\Core\Models\Channel;
 use Fetch404\Core\Models\Post;
 use Fetch404\Core\Models\Topic;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Laracasts\Flash\Flash;
 
 class ForumController extends Controller {
 
@@ -41,6 +46,8 @@ class ForumController extends Controller {
 			'user_id' => Auth::id(),
 			'content' => $body
 		));
+
+		event(new ThreadWasCreated($thread, $channel, Auth::user()));
 
 		return redirect($thread->Route);
 	}
@@ -86,17 +93,47 @@ class ForumController extends Controller {
 
 		$post->topic->touch();
 
+		event(new UserRepliedToThread($request->user(), $post, $topic));
+
 		return redirect($post->Route);
 	}
 
 	/**
 	 * Watch a channel.
 	 *
-	 * @return void
+	 * @param Request $request
+	 * @param Channel $channel
+	 * @return Response
 	 */
-	public function postWatchChannel()
+	public function watchChannel(Request $request, Channel $channel)
 	{
+		if (!$channel->canView($request->user())) abort(403);
+		if ($channel->watchers->contains($request->user()->id)) return redirect()->back();
 
+		$channel->watchers()->attach($request->user()->id);
+
+		Flash::success('You are now watching the channel "' . $channel->name . '".');
+
+		return redirect()->to($channel->Route);
+	}
+
+	/**
+	 * Unwatch a channel.
+	 *
+	 * @param Request $request
+	 * @param Channel $channel
+	 * @return Response
+	 */
+	public function unwatchChannel(Request $request, Channel $channel)
+	{
+		if (!$channel->canView($request->user())) abort(403);
+		if (!$channel->watchers->contains($request->user()->id)) return redirect()->back();
+
+		$channel->removeWatcher($request->user());
+
+		Flash::success('You are no longer watching the channel "' . $channel->name . '".');
+
+		return redirect()->to($channel->Route);
 	}
 
 	/**

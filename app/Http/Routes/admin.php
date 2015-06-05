@@ -10,6 +10,7 @@
 | and give it the controller to call when that URI is requested.
 |
 */
+$router->model('badge', 'Fetch404\Core\Models\Badge');
 
 $router->group(['middleware' => ['installed', 'csrf']], function() use ($router)
 {
@@ -103,6 +104,13 @@ $router->group(['middleware' => ['installed', 'csrf']], function() use ($router)
             $router->post('/category/{category}/delete', ['as' => 'admin.forum.post.delete.category', 'uses' => 'AdminForumsController@deleteCategory']);
         });
 
+        # Badges Management
+        $router->group(['prefix' => 'badges'], function() use ($router) {
+            $router->get('/', ['as' => 'admin.badges.index', 'uses' => 'AdminBadgesController@index']);
+            $router->get('/{badge}/edit', ['as' => 'admin.badges.get.edit', 'uses' => 'AdminBadgesController@edit']);
+            $router->post('/{badge}/edit', ['as' => 'admin.badges.post.edit', 'uses' => 'AdminBadgesController@update']);
+        });
+
         # Reports
         $router->group(['prefix' => 'reports'], function () use ($router)
         {
@@ -117,6 +125,6 @@ $router->group(['middleware' => ['installed', 'csrf']], function() use ($router)
             ]);
         });
 
-        //Entrust::routeNeedsPermission('admin*', 'accessAdminPanel');
+        Entrust::routeNeedsPermission('admin*', 'accessAdminPanel');
     });
 });

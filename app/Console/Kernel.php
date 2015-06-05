@@ -1,10 +1,15 @@
 <?php namespace App\Console;
 
+use App\Jobs\BadgeGiver;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Schema;
 
 class Kernel extends ConsoleKernel
 {
+    use DispatchesJobs;
+
     /**
      * The Artisan commands provided by your application.
      *
@@ -22,7 +27,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('inspire')
-                 ->hourly();
+        if (Schema::hasTable('migrations'))
+        {
+            $schedule->call(function() {
+                $this->dispatch(new BadgeGiver());
+            })->cron('* * * * *');
+        }
     }
 }

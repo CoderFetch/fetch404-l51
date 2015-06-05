@@ -25,22 +25,22 @@ class SendLikeNotification {
 	public function handle(UserLikedSomething $event)
 	{
 		//
-		$user = $event->getUser();
-		$object = $event->subject();
-
-		if ($event->getUserWhoCreatedObject())
-		{
-			$userWhoCreated = $event->getUserWhoCreatedObject();
-
-			$userWhoCreated->notifications()->create(array(
-				'subject_id' => $object->id,
-				'subject_type' => get_class($object),
-				'name' => 'user_liked_your_content',
-				'user_id' => $userWhoCreated->getId(),
-				'sender_id' => $user->getId(),
-				'is_read' => 0
-			));
-		}
+//		$user = $event->getUser();
+//		$object = $event->subject();
+//
+//		if ($event->getUserWhoCreatedObject())
+//		{
+//			$userWhoCreated = $event->getUserWhoCreatedObject();
+//
+//			$userWhoCreated->notifications()->create(array(
+//				'subject_id' => $object->id,
+//				'subject_type' => get_class($object),
+//				'name' => 'user_liked_your_content',
+//				'user_id' => $userWhoCreated->getId(),
+//				'sender_id' => $user->getId(),
+//				'is_read' => 0
+//			));
+//		}
 	}
 
 }

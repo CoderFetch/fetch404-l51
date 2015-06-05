@@ -58,21 +58,10 @@
                 @if (Auth::check())
                     <span class="pull-right">
 					    @if (Auth::id() != $post->user->id)
-                            @if (!$post->isLikedBy(Auth::user()))
-                                {!! Form::open(['route' => array('forum.post.posts.like', $post), 'style' => 'display: inline;']) !!}
-                                <button data-type="tooltip" data-original-title="Give reputation" type="submit" class="btn btn-success btn-sm give-rep">
-                                    <span class="fa fa-thumbs-o-up"></span>
-                                </button>
-                                {!! Form::close() !!}
-                            @endif
-                            @if ($post->isLikedBy(Auth::user()))
-                                {!! Form::open(['route' => array('forum.post.posts.dislike', $post), 'style' => 'display: inline;']) !!}
-                                <button data-type="tooltip" data-original-title="Remove reputation" type="submit" class="btn btn-danger btn-sm give-rep">
-                                    <span class="fa fa-thumbs-o-down"></span>
-                                </button>
-                                {!! Form::close() !!}
-                            @endif
-                        @endunless
+                        <button data-post-id="{{{ $post->id }}}" data-liked="{{{ $post->isLikedBy(Auth::user()) ? '1' : '0' }}}" type="tooltip" class="btn btn-{{{ $post->isLikedBy(Auth::user()) ? 'danger' : 'success' }}} btn-sm toggle-like" data-original-title="{{{ $post->isLikedBy(Auth::user()) ? 'Dislike ' : 'Like ' }}}post">
+                            <i class="fa fa-thumbs-o-{{{ $post->isLikedBy(Auth::user()) ? 'down' : 'up' }}}"></i>
+                        </button>
+                        @endif
                         <button class="btn btn-default btn-sm count-rep" data-toggle="modal" data-target="#likes-{{{ $post->id }}}"><strong>{{{ $post->likes()->count() }}}</strong></button>
 					</span>
                     <br />
@@ -86,7 +75,9 @@
     </div>
     @unless($post->likes()->count() == 0)
         <div class="panel-footer">
-            {!! $post->getLikeNames() !!}
+            <div id="like-names">
+                {!! $post->getLikeNames() !!}
+            </div>
         </div>
     @endunless
 </div>

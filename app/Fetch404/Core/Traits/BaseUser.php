@@ -86,6 +86,16 @@ trait BaseUser {
     }
 
     /**
+     * Get all of a user's badges.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function badges()
+    {
+        return $this->belongsToMany('Fetch404\Core\Models\Badge', 'user_badge', 'user_id');
+    }
+
+    /**
      * Get the value of a certain setting for this user.
      * If it has not yet been set, a default value will be returned,
      * or if none is specified, null.

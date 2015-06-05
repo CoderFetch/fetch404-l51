@@ -18,7 +18,11 @@
 						<a class="btn btn-success btn-xs" href="{{{ route('forum.get.channel.create.thread', [$channel->id]) }}}"><i class="fa fa-pencil"></i> Create thread</a>
 						@endif
 						@if (Auth::check())
-						<a class="btn btn-info btn-xs" href="#"><i class="fa fa-eye"></i> Watch channel</a>
+						@if (!$channel->watchers->contains(Auth::id()))
+						<a class="btn btn-info btn-xs" href="{{{ route('forum.get.watch.channel', [$channel->id]) }}}"><i class="fa fa-eye"></i> Watch channel</a>
+						@else
+						<a class="btn btn-info btn-xs" href="{{{ route('forum.get.unwatch.channel', [$channel->id]) }}}"><i class="fa fa-eye-slash"></i> Unwatch channel</a>
+						@endif
 						@endif
 					</div>
 					<h3 class="panel-title">
@@ -81,4 +85,14 @@
 			</div>
 		</div>
 	</div>
+@stop
+
+@section('jquery')
+	@if (Auth::check() && $channel->watchers->contains(Auth::id()))
+	var channel = pusher.subscribe('channel-{{{ $channel->id }}}');
+
+	channel.bind('Fetch404\Core\Events\ThreadWasCreated', function(data) {
+		console.log("hi", data);
+	});
+	@endif
 @stop

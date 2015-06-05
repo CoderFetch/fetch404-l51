@@ -67,10 +67,17 @@ class ProfileController extends Controller {
 			
 			if ($user == null || !$user)
 			{
-				return view('core.errors.modelnotfound');
+				abort(404);
 			}
 
-			if ($user->isBanned())
+			if (Auth::check())
+			{
+				if ($user->isBanned() && !Auth::user()->can('viewAllProfiles'))
+				{
+					return view('core.errors.profilenotavailable', array('user' => $user));
+				}
+			}
+			else if ($user->isBanned())
 			{
 				return view('core.errors.profilenotavailable', array('user' => $user));
 			}

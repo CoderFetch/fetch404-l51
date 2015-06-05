@@ -10,9 +10,10 @@
 		@yield('extra_tags')
 		
 		<link href="/assets/css/themes/{{{ $theme_id }}}.css" rel="stylesheet" type="text/css" media="all" />
-		<link href="/assets/css/summernote.css" rel="stylesheet" type="text/css" media="all" />
+		<link href="/assets/css/summernote.min.css" rel="stylesheet" type="text/css" media="all" />
 		<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" media="all">
 		<link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700|PT+Sans:400,700|Roboto:400,100,300,500,700" rel="stylesheet" type="text/css" media="all">
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 		<link href="//vjs.zencdn.net/4.12/video-js.css" rel="stylesheet">
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.3.2/css/bootstrap2/bootstrap-switch.min.css" rel="stylesheet" />
 		@if (Request::is('admin*'))
@@ -25,7 +26,6 @@
 		<script src="/assets/js/jquery-1.11.2.min.js"></script>
 		<script src="/assets/js/bootstrap.min.js"></script>
 		<script src="/assets/js/summernote.js"></script>
-		<script src="/assets/js/modernizr.custom.03766.js"></script>
 		<script src="//vjs.zencdn.net/4.12/video.js"></script>
 		@if (Request::is('admin*'))
 		<script src="/assets/js/admin/main.js"></script>
@@ -37,7 +37,7 @@
 		<script src='https://www.google.com/recaptcha/api.js'></script>
 		@endif
 
-		<script src="/assets/js/dropzone.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.1/min/dropzone.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.3.2/js/bootstrap-switch.min.js"></script>
 
 		<script src="//js.pusher.com/2.2/pusher.min.js"></script>
@@ -73,16 +73,41 @@
 
 				var pusher = new Pusher('25583fb8c5fc3fa9d831');
 
-				@yield('jquery')
 			});
 
 			@yield('scripts')
 		</script>
 
-		@if (Auth::check())
-		<script src="/assets/js/notifications.js"></script>
-		<script src="/assets/js/messages.js"></script>
-		@endif
+		<style>
+			.flash_message {
+				position: fixed;
+				bottom: 0;
+				right: 20px;
+				z-index: 10000;
+				background: #bb574e;
+				color: #fff;
+				border: none;
+				border-radius: 0;
+				padding: 18px 40px;
+				box-shadow: 0 0 15px #999;
+				min-width: 380px;
+				text-align: center;
+			}
+
+			.flash_message p {
+				color: #fff;
+			}
+
+			.flash_message a {
+				color: #fff;
+			}
+
+			.flash_message i {
+				margin-right: 20px;
+				vertical-align: middle;
+				display: inline-block;
+			}
+		</style>
 	</head>
 	
 	<body style="position: relative; padding-top: 60px; font-family: 'Source Sans Pro'; font-weight: 300;"@yield('extra_attributes')>
@@ -120,7 +145,7 @@
 							</a>
 						</li>
 					</ul>
-					{!! Form::open(['route' => 'search.send', 'class' => 'navbar-form navbar-right', 'role' => 'search']) !!}
+					{!! Form::open(['route' => 'search', 'class' => 'navbar-form navbar-right', 'role' => 'search', 'method' => 'GET']) !!}
 						<div class="form-group">
 							<input type="search" class="form-control" placeholder="Search" name="query" value="{{{ isset($searchQuery) ? $searchQuery : '' }}}"/>
 						</div>
@@ -136,7 +161,7 @@
 						@else
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-								{{{ $user->name }}}
+								<img src="{{{ $user->getAvatarURL(35) }}}" class="img-circle navbar-img" height="35" width="35" style="background-color: #ccc;"/> {{{ $user->name }}}
 								<b class="caret"></b>
 							</a>
 							<ul class="dropdown-menu">
@@ -191,5 +216,16 @@
 			<br />
 			@yield('content')
 		</div>
+
+		<script id="flash-template" type="text/template">
+			<div class="flash_message alert alert-info">
+				<a class="close" data-dismiss="alert" href="#" aria-hidden="true">&times;</a>
+
+				<p>
+					<i class="icon icon-2x icon-bullhorn"></i>
+					<a href="#" class="flash_message__body"></a>
+				</p>
+			</div>
+		</script>
 	</body>
 </html>

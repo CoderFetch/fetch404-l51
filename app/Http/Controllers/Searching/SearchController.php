@@ -6,10 +6,13 @@ use Fetch404\Core\Models\Post;
 use Fetch404\Core\Models\Report;
 use Fetch404\Core\Models\Topic;
 use Fetch404\Core\Models\User;
+use Illuminate\Cache\CacheManager;
+use Illuminate\Cache\Repository;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Input;
 use Zizaco\Entrust\EntrustFacade as Entrust;
 
@@ -47,17 +50,30 @@ class SearchController extends Controller
      */
     protected $conversation;
 
-    /*
-     * Create a new search controller instance.
-     * @type mixed
+    /**
+     * The Cache repository instance.
+     * @var Repository
      */
-    public function __construct(User $user, Post $post, Topic $topic, Report $report, Conversation $conversation)
+    protected $store;
+
+    /**
+     * Create a new search controller instance.
+     *
+     * @param User $user
+     * @param Post $post
+     * @param Topic $topic
+     * @param Report $report
+     * @param Conversation $conversation
+     * @param Repository $repository
+     */
+    public function __construct(User $user, Post $post, Topic $topic, Report $report, Conversation $conversation, Repository $repository)
     {
         $this->user = $user;
         $this->post = $post;
         $this->topic = $topic;
         $this->report = $report;
         $this->conversation = $conversation;
+        $this->store = $repository;
     }
 
     /**
@@ -78,9 +94,28 @@ class SearchController extends Controller
      */
     public function search(SearchRequest $request)
     {
-        $searchQuery = Input::get('query') ?: ($request->input('query') ?: '');
+//        if (!$request->has('query')) return redirect()->to('/search');
+//
+//        $searchQuery = $request->input('query');
+
+        $searchQuery = ($this->store->has('searchQuery') ? $this->store->get('searchQuery') : $request->input('query'));
 
         $resultsArray = [];
+
+        $searchQuery = $this->store->remember('searchQuery', 60, function() use ($searchQuery) {
+            return $searchQuery;
+        });
+
+        if (($request->input('query') != null) && $searchQuery != $request->input('query'))
+        {
+            Cache::forget('searchQuery');
+
+            $searchQuery = $this->store->remember('searchQuery', 60, function() use ($request) {
+                return $request->input('query');
+            });
+        }
+
+        if ($searchQuery == null) return view('core.search.search');
 
         // Search in the topics table
         $topics = $this->topic->where('title', 'like', '%' . $searchQuery . '%')->get();
@@ -117,6 +152,7 @@ class SearchController extends Controller
             $resultsArray[] = $conv;
         }
 
+        Cache::forget('results');
         $results = Collection::make($resultsArray);
 
         $results = $results->filter(function($item)
@@ -190,8 +226,33 @@ class SearchController extends Controller
 
         });
 
+        $collection = $results;
+
+        $results = $this->store->remember('results', 60, function() use ($results, $request) {
+            return ['query' => $request->input('query'), 'results' => $results];
+        });
+
+        if ($this->store->has('results') && $this->store->get('results') != $results)
+        {
+            $results = $this->store->remember('results', 60, function() use ($results, $request) {
+                return ['query' => $request->input('query'), 'results' => $results];
+            });
+        }
+
+//        $results = ($this->store->has('results') ? $this->store->get('results') : $collection);
+
+        if ($this->store->has('results'))
+        {
+            $arr = $this->store->get('results');
+
+            if ($arr['query'] == $request->input('query'))
+            {
+                $results = $arr['results'];
+            }
+        }
+
         $page = Input::get('page') ?: 1;
-        $perPage = 5;
+        $perPage = 10;
         $pagination = new LengthAwarePaginator(
             $results->forPage($page, $perPage),
             $results->count(),

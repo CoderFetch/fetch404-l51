@@ -1,10 +1,10 @@
 <?php namespace App\Http\Controllers\Users;
 
-use App\Events\UserFollowedSomeone;
-use App\Events\UserUnfollowedSomeone;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Account\FollowUserRequest;
 use App\Http\Requests\Account\UnfollowUserRequest;
+use Fetch404\Core\Events\UserFollowedSomeone;
+use Fetch404\Core\Events\UserUnfollowedSomeone;
 use Laracasts\Flash\Flash;
 
 class FollowsController extends Controller {
@@ -58,7 +58,7 @@ class FollowsController extends Controller {
     public function unfollow(UnfollowUserRequest $request)
     {
         $user = $request->user();
-        $userToUnfollow = $request->route()->getParameter('user');
+        $userToUnfollow = $request->route('user');
 
         if ($user->getId() == $userToUnfollow->getId())
         {

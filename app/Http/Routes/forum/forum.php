@@ -28,7 +28,8 @@ $router->group(['middleware' => ['installed', 'csrf', 'bancheck', 'update_last_a
 
         $router->get('/channel/{channel}', ['uses' => 'Forum\ForumPageController@showChannel', 'as' => 'forum.get.show.channel']);
 
-        $router->post('/channel/{channel}/watch', ['uses' => 'Forum\ForumController@postWatchChannel', 'as' => 'forum.post.watch.channel']);
+        $router->get('/channel/{channel}/watch', ['uses' => 'Forum\ForumController@watchChannel', 'as' => 'forum.get.watch.channel']);
+        $router->get('/channel/{channel}/unwatch', ['uses' => 'Forum\ForumController@unwatchChannel', 'as' => 'forum.get.unwatch.channel']);
 
         $router->get('/channel/{channel}/create-thread', ['uses' => 'Forum\ForumPageController@showCreateThread', 'as' => 'forum.get.channel.create.thread']);
         $router->post('/channel/{channel}/create-thread', ['uses' => 'Forum\ForumController@postCreateThread', 'as' => 'forum.post.channel.create.thread']);

@@ -1,9 +1,6 @@
 <?php namespace App\Providers;
 
 use Fetch404\Core\Events\ProfilePostWasDeleted;
-use Fetch404\Core\Events\TopicWasLocked;
-use Fetch404\Core\Events\TopicWasPinned;
-use Fetch404\Core\Events\TopicWasUnlocked;
 use Fetch404\Core\Events\UserDislikedSomething;
 use Fetch404\Core\Events\UserFollowedSomeone;
 use Fetch404\Core\Events\UserLikedSomething;
@@ -16,8 +13,6 @@ use Fetch404\Core\Handlers\AddProfilePost;
 use Fetch404\Core\Handlers\AddUserFollower;
 use Fetch404\Core\Handlers\BanUser;
 use Fetch404\Core\Handlers\DeleteProfilePost;
-use Fetch404\Core\Handlers\LockTopic;
-use Fetch404\Core\Handlers\PinTopic;
 use Fetch404\Core\Handlers\RemoveUserFollower;
 use Fetch404\Core\Handlers\SendDislikeNotification;
 use Fetch404\Core\Handlers\SendEmailConfirmation;
@@ -26,7 +21,6 @@ use Fetch404\Core\Handlers\SendLikeNotification;
 use Fetch404\Core\Handlers\SendProfilePostNotification;
 use Fetch404\Core\Handlers\SetMemberRole;
 use Fetch404\Core\Handlers\UnbanUser;
-use Fetch404\Core\Handlers\UnlockTopic;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -40,15 +34,6 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         ProfilePostWasDeleted::class => [
             DeleteProfilePost::class
-        ],
-        TopicWasLocked::class => [
-            LockTopic::class
-        ],
-        TopicWasPinned::class => [
-            PinTopic::class
-        ],
-        TopicWasUnlocked::class => [
-            UnlockTopic::class
         ],
         UserDislikedSomething::class => [
             SendDislikeNotification::class

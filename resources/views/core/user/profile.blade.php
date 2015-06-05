@@ -108,6 +108,7 @@
 							<li role="presentation" class="active"><a href="#profile-posts" aria-controls="profile-posts" role="tab" data-toggle="tab">Profile posts</a></li>
 							<li role="presentation"><a href="#postings" aria-controls="postings" role="tab" data-toggle="tab">Postings</a></li>
 							<li role="presentation"><a href="#information" aria-controls="information" role="tab" data-toggle="tab">Information</a></li>
+							<li role="presentation"><a href="#badges" aria-controls="badges" role="tab" data-toggle="tab">Badges</a></li>
 						</ul>
 
 						<!-- Tab panes -->
@@ -143,6 +144,20 @@
 							</div>
 							<div role="tabpanel" class="tab-pane fade" id="information">
 								Coming soon
+							</div>
+							<div role="tabpanel" class="tab-pane fade" id="badges">
+								<h3>Badges ({{{ $user->badges()->count() }}})</h3>
+								<hr>
+								@if ($user->badges()->count() == 0)
+								This user has not received any badges.
+								@else
+								<ul>
+									@foreach($user->badges as $badge)
+									{{{ $badge->name }}}
+									- <small>{{{ str_limit($badge->description, 45) }}}</small>
+									@endforeach
+								</ul>
+								@endif
 							</div>
 						</div>
 					</div>

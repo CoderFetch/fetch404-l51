@@ -56,6 +56,7 @@ class RouteServiceProvider extends ServiceProvider {
             require app_path('Http/Routes/news.php');
             require app_path('Http/Routes/search.php');
             require app_path('Http/Routes/users.php');
+            require app_path('Http/Routes/conversations.php');
             require app_path('Http/Routes/forum/reports.php');
         });
     }

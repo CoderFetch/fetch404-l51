@@ -168,6 +168,7 @@ return [
         'Blade'     => 'Illuminate\Support\Facades\Blade',
         'Bus'       => 'Illuminate\Support\Facades\Bus',
         'Cache'     => 'Illuminate\Support\Facades\Cache',
+        'Carbon'    => 'Carbon\Carbon',
         'Config'    => 'Illuminate\Support\Facades\Config',
         'Cookie'    => 'Illuminate\Support\Facades\Cookie',
         'Crypt'     => 'Illuminate\Support\Facades\Crypt',

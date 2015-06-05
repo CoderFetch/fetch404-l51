@@ -1,7 +1,6 @@
 <?php namespace Fetch404\Core\Handlers;
 
-use App\Events\UserFollowedSomeone;
-
+use Fetch404\Core\Events\UserFollowedSomeone;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldBeQueued;
 

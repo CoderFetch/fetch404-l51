@@ -3,9 +3,9 @@
 {{-- Content here --}}
 @section('content')
     <h1>Search</h1>
-    {{--{!! Form::open(['route' => 'search.send', 'class' => 'form-horizontal']) !!}--}}
-        {{--<input type="text" class="form-control" name="query" value="{{{ isset($searchQuery) ? $searchQuery : '' }}}" />--}}
-    {{--{!! Form::close() !!}--}}
+    {!! Form::open(['route' => 'search', 'class' => 'form-horizontal']) !!}
+        <input type="text" class="form-control" name="query" value="{{{ isset($searchQuery) ? $searchQuery : '' }}}" />
+    {!! Form::close() !!}
     <hr>
     <div class="well">
         @if (!isset($results))

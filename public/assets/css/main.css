@@ -156,3 +156,15 @@
 .latest-status {
     color: white;
 }
+
+.navbar .navbar-icon {
+    float: left;
+    margin-right: 10px;
+    margin-top: -6px;
+}
+
+.navbar .navbar-img {
+    float: left;
+    margin-right: 10px;
+    margin-top: -6px;
+}
