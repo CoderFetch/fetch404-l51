@@ -1,7 +1,7 @@
 {
-	"name": "laravel/laravel",
-	"description": "The Laravel Framework.",
-	"keywords": ["framework", "laravel"],
+	"name": "fetch404/fetch404",
+	"description": "Fetch404!",
+	"keywords": ["forum", "fetch404"],
 	"license": "MIT",
 	"type": "project",
 	"require": {
@@ -19,7 +19,8 @@
 		"pusher/pusher-php-server": "dev-master",
 		"zizaco/entrust": "dev-laravel-5",
 	  	"cmgmyr/messenger": "~2.0",
-	  	"bllim/datatables": "*"
+	  	"bllim/datatables": "*",
+	  	"jenssegers/date": "^3.0"
 	},
 	"autoload": {
 		"classmap": [
@@ -50,8 +51,8 @@
 		]
 	},
 	"config": {
-		"preferred-install": "dist"
+		"preferred-install": "dev"
 	},
 	"minimum-stability": "dev",
-	"prefer-stable": true
+	"prefer-stable": false
 }
